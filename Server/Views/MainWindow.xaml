@@ -1,0 +1,112 @@
+﻿<Window x:Class="Server.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Common.Converters;assembly=Common"
+        mc:Ignorable="d"
+        Title="Serwer" Height="500" MinWidth="500" Background="#ecf0f1">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:InverseBoolToVisConverter x:Key="InverseBoolToVis" />
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="72" />
+            <Setter Property="Foreground" Value="#2c3e50" />
+            <Setter Property="FontFamily" Value="Calibri" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style x:Key="ButtonStyleGraj" TargetType="Button">
+            <Setter Property="Visibility" Value="Visible" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ShowWaitingForPlayer}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsConnected }" Value="True" />
+                        <Condition Binding="{Binding ShowWaitingForPlayer }" Value="False" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0" Grid.ColumnSpan="3" Background="#34495e">
+            <Label Content="Adres IP" Width="60" Foreground="#ecf0f1" FontWeight="Bold"
+                   VerticalContentAlignment="Center" />
+            <TextBox Text="{Binding AddressIp}" Margin="10" Width="200" Height="26" VerticalContentAlignment="Center"
+                     Background="#ecf0f1" Foreground="#34495e" />
+            <Button Content="Graj" Style="{StaticResource ButtonStyleGraj}" Background="#ecf0f1" Foreground="#34495e"
+                    FontWeight="Bold" Margin="10" Width="120" Click="Button_Click" />
+            <Label Content="Połączono" Width="120" HorizontalContentAlignment="Center"
+                   Visibility="{Binding IsConnected, Converter={StaticResource BoolToVis}}" Margin="10"
+                   Background="#2ecc71" Foreground="White" FontWeight="Bold" />
+            <Label Content="Oczekiwanie na gracza 2"
+                   Visibility="{Binding ShowWaitingForPlayer, Converter={StaticResource BoolToVis}}" Margin="10"
+                   Background="#e74c3c" Foreground="White" />
+        </WrapPanel>
+        <WrapPanel Grid.Row="1" Grid.ColumnSpan="3" Background="#34495e"
+                   Visibility="{Binding IsConnected, Converter={StaticResource BoolToVis}}">
+            <Label Width="80" Content="{Binding Znak}" HorizontalContentAlignment="Center" Foreground="White"
+                   FontWeight="Bold" FontSize="30" />
+            <Label Width="200" Content="Gracz 1" FontSize="30" FontWeight="Bold" Foreground="#3498db"
+                   HorizontalContentAlignment="Center" />
+            <Label Content="Twój ruch" Width="120" HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" Visibility="{Binding Mode, Converter={StaticResource BoolToVis}}"
+                   Margin="10" Background="#2ecc71" Foreground="White" FontWeight="Bold" />
+            <Label Content="Ruch przeciwnika" HorizontalContentAlignment="Center" Width="120"
+                   VerticalContentAlignment="Center"
+                   Visibility="{Binding Mode, Converter={StaticResource InverseBoolToVis}}" Margin="10"
+                   Background="#e74c3c" Foreground="White" FontWeight="Bold" />
+        </WrapPanel>
+        <Grid Grid.Row="2" Visibility="{Binding IsConnected, Converter={StaticResource BoolToVis}}"
+              IsEnabled="{Binding Mode}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Tag="0" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[0]}" />
+            <Button Grid.Row="0" Grid.Column="1" Tag="1" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[1]}" />
+            <Button Grid.Row="0" Grid.Column="2" Tag="2" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[2]}" />
+            <Button Grid.Row="1" Grid.Column="0" Tag="3" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[3]}" />
+            <Button Grid.Row="1" Grid.Column="1" Tag="4" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[4]}" />
+            <Button Grid.Row="1" Grid.Column="2" Tag="5" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[5]}" />
+            <Button Grid.Row="2" Grid.Column="0" Tag="6" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[6]}" />
+            <Button Grid.Row="2" Grid.Column="1" Tag="7" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[7]}" />
+            <Button Grid.Row="2" Grid.Column="2" Tag="8" Style="{StaticResource ButtonStyle}" Click="ClickButton"
+                    Content="{Binding Plansza[8]}" />
+        </Grid>
+        <WrapPanel Grid.Row="3" Grid.ColumnSpan="3" Background="#34495e">
+            <Label Width="100" HorizontalContentAlignment="Center" Content="Wygrałeś!!!"
+                   Visibility="{Binding Result, Converter={StaticResource BoolToVis}}" Background="#2ecc71"
+                   Foreground="White" Margin="10" />
+            <Label Width="100" HorizontalContentAlignment="Center" Content="Przegrałeś!!!"
+                   Visibility="{Binding Result, Converter={StaticResource InverseBoolToVis}}" Background="#e74c3c"
+                   Foreground="White" Margin="10" />
+            <Label Width="100" HorizontalContentAlignment="Center" Content="Remis!!!"
+                   Visibility="{Binding Remis, Converter={StaticResource BoolToVis}}" Background="#3498db"
+                   Foreground="White" Margin="10" />
+        </WrapPanel>
+    </Grid>
+</Window>
